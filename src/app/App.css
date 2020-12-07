@@ -1,0 +1,120 @@
+* {
+  font-size: 13px;
+}
+.wrapper {
+  display: flex;
+  height: 100% !important;
+}
+.container {
+  position: relative;
+}
+
+form label {
+  font-weight: 500;
+}
+
+/* NavBar */
+.modal-60w {
+  max-width: 40% !important;
+}
+
+/* NavBar */
+.sidebar-sticky {
+  position: -webkit-sticky;
+  position: sticky !important;
+  top: 0;
+  height: 100vh;
+  padding-top: 0.5rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.navbar {
+  border-right: 1px solid #ddd;
+  width: 240px;
+  background-color: #fff;
+  display: inline-block !important;
+}
+.navbar .logo {
+  width: 122px !important;
+  margin: 20px 0 30px 10px !important;
+}
+.navbar ul > li > .small {
+  font-size: 11px;
+  color: #666;
+  padding-left: 10px;
+}
+.navbar ul > li > a {
+  width: 100%;
+  display: inline-block;
+  color: #555555;
+  padding: 5px 10px;
+  margin: 2px 0;
+  border-radius: 4px;
+  font-weight: 500;
+}
+.navbar ul > li > a:hover {
+  text-decoration: none;
+  color: #0a67aa;
+  background-color: #f1f9ff;
+}
+.navbar ul > li > a > i {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  line-height: 24px;
+}
+.navbar ul > li > a > span {
+  margin: 0 10px;
+}
+.navbar ul > li > ul > li {
+  padding-left: 30px;
+}
+
+.navbar .options-profile {
+  position: absolute;
+  bottom: 30px;
+}
+
+/* Container */
+/* Budgets */
+
+.budget-list li:first-child h6 {
+  margin-bottom: 0;
+}
+.list-group-item.active ul li p {
+  color: #fff !important;
+  opacity: 0.5;
+}
+.budget-col {
+  max-height: calc(100vh - 65px) !important;
+  overflow: scroll;
+}
+
+/* Table */
+.table thead tr th {
+  border-top: none !important;
+  padding-top: 20px;
+}
+
+/* Footer */
+.align-center .footer {
+  position: fixed !important;
+  display: flex;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.align-center .footer ul {
+  margin: auto !important;
+}
+.align-left .footer ul {
+  border-top: 1px solid #ddd;
+  padding-top: 15px;
+  margin-top: 30px;
+  margin-right: auto !important;
+  margin-bottom: 15px;
+}

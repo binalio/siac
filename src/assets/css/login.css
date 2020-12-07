@@ -1,0 +1,16 @@
+.wrapper {
+  height: 100vh;
+}
+.wrapper .logo {
+  width: 194px;
+  margin: 20px auto;
+  display: block;
+}
+
+.form-label-hide .form-group label {
+  display: none;
+}
+
+.footer ul {
+  margin: auto;
+}
