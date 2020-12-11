@@ -79,9 +79,6 @@ form label {
 /* Container */
 /* Budgets */
 
-.budget-list li:first-child h6 {
-  margin-bottom: 0;
-}
 .list-group-item.active ul li p {
   color: #fff !important;
   opacity: 0.5;

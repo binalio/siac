@@ -7,68 +7,77 @@ import Pagination from "../components/common/pagination";
 import { paginate } from "../utils/paginate";
 import { Button } from "react-bootstrap";
 import ContractsTable from "./contractsTable";
+import TypeMediaFilter from "../components/typeMediaFilter";
 
-import {
-  getTransactions,
-  deleteTransaction,
-} from "../services/fakeTransactionService";
-import { getBudgets } from "../services/fakeBudgetService";
-import { getPeriods } from "../services/fakePeriodService";
+import { getContracts, deleteContract } from "../services/fakeContractService";
+import { getSuppliers } from "../services/fakeSupplierService";
+import { getTypeMedia } from "../services/fakeTypeMediaService";
 
 class Contracts extends Component {
   state = {
-    transactions: [],
-    budgets: [],
-    periods: [],
+    contracts: [],
+    totalContracts: [],
+    suppliers: [],
+    typessMedia: [],
     currentPage: 1,
     pageSize: 15,
     searchQuery: "",
-    selectedBudget: null,
-    selectedPeriod: null,
+    selectedSupplier: null,
+    selectedTypeMedia: null,
     sortColumn: { path: "title", order: "asc" },
     isOpen: false,
     titleEdit: false,
-    titleTransaction: "",
+    titleContract: "",
     idValue: "new",
   };
 
   componentDidMount() {
+    const typesMedia = [{ _id: "0", name: "Todos" }, ...getTypeMedia()];
     this.setState({
-      transactions: getTransactions(),
-      budgets: getBudgets(),
-      periods: getPeriods(),
+      contracts: getContracts(),
+      totalContracts: getContracts(),
+      suppliers: getSuppliers(),
+      typesMedia: typesMedia,
     });
   }
 
-  handleDelete = (transaction) => {
-    const transactions = this.state.transactions.filter(
-      (m) => m._id !== transaction._id
+  handleDelete = (contract) => {
+    const contracts = this.state.contracts.filter(
+      (m) => m._id !== contract._id
     );
-    this.setState({ transactions });
+    this.setState({ contracts });
 
-    deleteTransaction(transaction._id);
+    deleteContract(contract._id);
   };
 
   handlePageChange = (page) => {
     this.setState({ currentPage: page });
   };
 
-  handlePeriodSelect = (period) => {
-    //console.log(period);
+  handleTypeMediaSelect = (typeMedia) => {
+    //console.log(typeMedia);
     this.setState({
-      selectedPeriod: period,
-      selectedBudget: null,
+      selectedTypeMedia: typeMedia,
+      searchQuery: "",
       currentPage: 1,
     });
   };
 
-  handleBudgetSelect = (budget) => {
+  handleSupplierSelect = (supplier) => {
     //console.log(budget);
-    this.setState({ selectedBudget: budget, searchQuery: "", currentPage: 1 });
+    this.setState({
+      selectedSupplier: supplier,
+      searchQuery: "",
+      currentPage: 1,
+    });
   };
 
   handleSearch = (query) => {
-    this.setState({ searchQuery: query, selectedBudget: null, currentPage: 1 });
+    this.setState({
+      searchQuery: query,
+      selectedSupplier: null,
+      currentPage: 1,
+    });
   };
 
   handleSort = (sortColumn) => {
@@ -80,80 +89,91 @@ class Contracts extends Component {
       pageSize,
       currentPage,
       sortColumn,
-      selectedBudget,
-      selectedPeriod,
+      selectedSupplier,
+      selectedTypeMedia,
       searchQuery,
-      transactions: allTransactions,
-      budgets: allBudgets,
-      periods: allPeriods,
+      contracts: allContracts,
+      totalContracts: totalContracts,
+      suppliers: allSuppliers,
+      typesMedia: allTypesMedia,
     } = this.state;
 
-    const year = new Date().getFullYear().toString();
-    const defaultPeriod = !selectedPeriod
-      ? allPeriods.find((o) => o.name === year)
-      : selectedPeriod;
-    const defaultBudget = allBudgets.find(
-      (o) => o.periodId === defaultPeriod._id
-    );
+    //const defaultSupplier = allSuppliers[0];
 
-    let filteredBudgets = allBudgets;
-    let filtered = allTransactions;
+    const defaultTypeMedia = !selectedTypeMedia
+      ? allTypesMedia.find((o) => o.name === "Todos")
+      : selectedTypeMedia;
 
-    if (!selectedPeriod)
-      filteredBudgets = allBudgets.filter(
-        (b) => b.periodId === defaultPeriod._id
+    const defaultSupplier =
+      defaultTypeMedia.name === "Todos"
+        ? allSuppliers[0]
+        : allSuppliers.find((o) => o.mediaId === defaultTypeMedia._id);
+
+    //console.log(defaultSupplier);
+
+    let filteredSuppliers = allSuppliers;
+    let filtered = allContracts;
+
+    if (!selectedTypeMedia) filteredSuppliers = allSuppliers;
+    else if (
+      selectedTypeMedia &&
+      selectedTypeMedia._id &&
+      selectedTypeMedia.name !== "Todos"
+    )
+      filteredSuppliers = allSuppliers.filter(
+        (b) => b.mediaId === selectedTypeMedia._id
       );
-    else if (selectedPeriod && selectedPeriod._id)
-      filteredBudgets = allBudgets.filter(
-        (b) => b.periodId === selectedPeriod._id
-      );
+
+    // console.log(selectedSupplier);
 
     if (searchQuery)
-      filtered = allTransactions.filter((t) =>
-        t.typeTransaction.name
-          .toLowerCase()
-          .startsWith(searchQuery.toLowerCase())
+      filtered = allContracts.filter((c) =>
+        c.budget.period.toLowerCase().startsWith(searchQuery.toLowerCase())
       );
-    else if (selectedBudget === null)
-      filtered = allTransactions.filter(
-        (t) => t.budget._id === defaultBudget._id
+    else if (selectedSupplier === null)
+      filtered = allContracts.filter(
+        (t) => t.supplier._id === defaultSupplier._id
       );
     else
-      filtered = allTransactions.filter(
-        (t) => t.budget._id === selectedBudget._id
+      filtered = allContracts.filter(
+        (t) => t.supplier._id === selectedSupplier._id
       );
 
-    const budgets = _.orderBy(filteredBudgets);
+    const suppliers = _.orderBy(filteredSuppliers);
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
 
-    const transactions = paginate(sorted, currentPage, pageSize);
+    const contracts = paginate(sorted, currentPage, pageSize);
 
-    const periodDefault = selectedPeriod ? selectedPeriod : defaultPeriod;
+    const typeMediaDefault = selectedTypeMedia
+      ? selectedTypeMedia
+      : defaultTypeMedia;
 
     return {
       totalCount: filtered.length,
-      data: transactions,
-      list: budgets,
-      defaultBudget: defaultBudget,
-      periodDefault: periodDefault,
-      selectedPeriod: selectedPeriod,
+      data: contracts,
+      totalContracts: totalContracts,
+      list: suppliers,
+      defaultSupplier: defaultSupplier,
+      typeMediaDefault: typeMediaDefault,
+      selectedTypeMedia: selectedTypeMedia,
     };
   };
 
   render() {
-    const { length: count } = this.state.transactions;
+    const { length: count } = this.state.contracts;
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
 
     if (count === 0) return <p>No hay transacciones en la Base de Datos.</p>;
 
     const {
       totalCount,
-      data: transactions,
-      list: budgets,
-      defaultBudget,
-      periodDefault,
-      selectedPeriod,
+      data: contracts,
+      list: suppliers,
+      totalContracts: totalContracts,
+      defaultSupplier,
+      typeMediaDefault,
+      selectedTypeMedia,
     } = this.getPageData();
 
     return (
@@ -161,6 +181,12 @@ class Contracts extends Component {
         <div className="row mt-4 mb-3">
           <div className="col-3 pr-0 d-flex">
             <h4 className="mb-0 pt-1">Proveedores</h4>
+            <TypeMediaFilter
+              typesMedia={this.state.typesMedia}
+              typeMediaDefault={typeMediaDefault}
+              selectedTypeMedia={selectedTypeMedia}
+              onTypeMediaSelect={this.handleTypeMediaSelect}
+            />
           </div>
           <div className="col d-flex">
             <h4 className="mb-0 pt-1">Contratos</h4>
@@ -184,15 +210,16 @@ class Contracts extends Component {
             <div className="row">
               <div className="col-3 px-0 border-right budget-col">
                 <SupplierList
-                  budgets={budgets}
-                  defaultBudget={defaultBudget}
-                  selectedItem={this.state.selectedBudget}
-                  onItemSelect={this.handleBudgetSelect}
+                  suppliers={suppliers}
+                  totalContracts={totalContracts}
+                  defaultSupplier={defaultSupplier}
+                  selectedItem={this.state.selectedSupplier}
+                  onItemSelect={this.handleSupplierSelect}
                 />
               </div>
               <div className="col">
                 <ContractsTable
-                  transactions={transactions}
+                  contracts={contracts}
                   sortColumn={sortColumn}
                   onDelete={this.handleDelete}
                   onSort={this.handleSort}
@@ -215,7 +242,7 @@ class Contracts extends Component {
         <ContractModal
           handleOpen={this.state.isOpen}
           handleTitle={this.state.titleEdit}
-          titleTransaction={this.state.titleTransaction}
+          titleContract={this.state.titleContract}
           item={this.state.idValue}
           handleClose={() => this.setState({ isOpen: false })}
         />

@@ -4,7 +4,7 @@ import ContractForm from "./contractForm";
 
 class ContractModal extends Component {
   render() {
-    const title = !this.props.handleTitle ? "Nueva" : "Editar ";
+    const title = !this.props.handleTitle ? "Nuevo" : "Editar ";
     //console.log(this.props.item);
     return (
       <Modal
@@ -14,7 +14,7 @@ class ContractModal extends Component {
       >
         <Modal.Header closeButton>
           <Modal.Title>
-            {title} transacción{`: ${this.props.titleTransaction}`}
+            {title} contrato{`: ${this.props.titleContract}`}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
