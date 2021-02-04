@@ -33,13 +33,24 @@ class TransactionForm extends Form {
 
   componentDidMount() {
     const typeTransactions = getTypeTransactions();
-    this.setState({ typeTransactions });
+    const setTypeTransactions = [
+      ...new Map(typeTransactions.map((item) => [item.name, item])).values(),
+    ];
+    this.setState({ typeTransactions: setTypeTransactions });
 
-    const budgets = getBudgets();
+    const period = !this.props.periodDefault
+      ? this.props.selectedPeriod
+      : this.props.periodDefault;
+
+    let budgets = getBudgets();
+    budgets = budgets.filter((b) => b.periodId === period._id);
+
+    //console.log(period._id);
+
     const setbudgets = [
       ...new Map(budgets.map((item) => [item.name, item])).values(),
     ];
-    console.log(setbudgets);
+
     this.setState({ budgets: setbudgets });
 
     const transactionId = this.props.itemId;
@@ -58,7 +69,7 @@ class TransactionForm extends Form {
     let number = Number(currency.replace(/[^0-9.-]+/g, ""));
     //console.log(number);
     return {
-      _id: transaction._id,
+      _id: Joi.string(),
       typeTransactionId: transaction.typeTransaction._id,
       budgetId: transaction.budget._id,
       amount: number,

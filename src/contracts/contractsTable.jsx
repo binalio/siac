@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Table from "../components/common/table";
 import ConfirmationModal from "../components/confirmationModal";
-import TransactionModal from "./contractModal";
+import ContractModal from "./contractModal";
 
 class ContractsTable extends Component {
   state = {
@@ -9,60 +9,61 @@ class ContractsTable extends Component {
     confirmIsOpen: false,
     confirmAction: false,
     idValue: null,
-    titleTransaction: "",
+    titleContract: "",
     titleEdit: true,
-    transaction: [],
+    contract: [],
     msjConfirmation: "",
   };
 
   openModal = (value, name) =>
-    this.setState({ isOpen: true, idValue: value, titleTransaction: name });
+    this.setState({ isOpen: true, idValue: value, titleContract: name });
   closeModal = () => this.setState({ isOpen: false });
 
   openConfirmation = (value) => {
     const msjConfirmation = (
       <>
-        Estas a punto de eliminar el movimiento
-        <b> {value.typeTransaction.name}</b>, en caso de hacerlo, su monto de
-        <b> {value.amount}</b> se devolvera al presupuesto{" "}
-        <b> {value.budget.name}</b>. ¿Deseas continuar?
+        Estas a punto de eliminar el contrato
+        <b> {value.budget.period.name}</b>, del proveedor
+        <b> {value.supplier.name}</b>, ¿deseas continuar?
       </>
     );
     this.setState({
       confirmIsOpen: true,
-      transaction: value,
+      contract: value,
       msjConfirmation: msjConfirmation,
     });
   };
 
-  handleDelete = (transaction) => {
-    this.props.onDelete(transaction);
+  handleDelete = (contract) => {
+    this.props.onDelete(contract);
     this.setState({ confirmIsOpen: false });
   };
 
   columns = [
     {
-      path: "typeTransaction.name",
-      label: "Tipo de transacción",
-      content: (transaction) => (
+      path: "budget.period.name",
+      label: "Contrato",
+      content: (contract) => (
         <a
-          href="#"
+          href="#/"
           onClick={() =>
-            this.openModal(transaction._id, transaction.typeTransaction.name)
+            this.openModal(contract._id, contract.budget.period.name)
           }
         >
-          {transaction.typeTransaction.name}
+          {contract.budget.period.name}
         </a>
       ),
     },
+    { path: "startDate", label: "Fecha inicio" },
+    { path: "endDate", label: "Fecha fin" },
     { path: "amount", label: "Monto" },
-    { path: "dateTransaction", label: "Fecha" },
+    { path: "balance", label: "Saldo" },
     {
       key: "delete",
-      content: (transaction) => (
+      content: (contract) => (
         <a
-          href="#"
-          onClick={() => this.openConfirmation(transaction)}
+          href="#/"
+          onClick={() => this.openConfirmation(contract)}
           className="text-muted"
         >
           <i className="fal fa-trash-alt fa-lg"></i>
@@ -72,26 +73,27 @@ class ContractsTable extends Component {
   ];
 
   render() {
-    const { transactions, onSort, sortColumn } = this.props;
+    const { contracts, onSort, sortColumn } = this.props;
+    //console.log(this.state.idValue);
 
     return (
       <div>
         <Table
           columns={this.columns}
-          data={transactions}
+          data={contracts}
           sortColumn={sortColumn}
           onSort={onSort}
         />
-        <TransactionModal
+        <ContractModal
           handleOpen={this.state.isOpen}
           handleTitle={this.state.titleEdit}
-          titleTransaction={this.state.titleTransaction}
+          titleContract={this.state.titleContract}
           item={this.state.idValue}
           handleClose={() => this.setState({ isOpen: false })}
         />
         <ConfirmationModal
           openConfirmation={this.state.confirmIsOpen}
-          transaction={this.state.transaction}
+          elementDelete={this.state.contract}
           msjConfirmation={this.state.msjConfirmation}
           confirmationClose={() => this.setState({ confirmIsOpen: false })}
           onDelete={this.handleDelete}

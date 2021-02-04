@@ -123,6 +123,8 @@ class Budgets extends Component {
         (t) => t.budget._id === selectedBudget._id
       );
 
+    console.log(filtered);
+
     const budgets = _.orderBy(filteredBudgets);
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
@@ -223,6 +225,8 @@ class Budgets extends Component {
           handleTitle={this.state.titleEdit}
           titleTransaction={this.state.titleTransaction}
           item={this.state.idValue}
+          periodDefault={periodDefault}
+          selectedPeriod={selectedPeriod}
           handleClose={() => this.setState({ isOpen: false })}
         />
       </div>

@@ -21,6 +21,8 @@ class TransactionModal extends Component {
           <TransactionForm
             itemId={this.props.item}
             onHide={this.props.handleClose}
+            periodDefault={this.props.periodDefault}
+            selectedPeriod={this.props.selectedPeriod}
           />
         </Modal.Body>
       </Modal>

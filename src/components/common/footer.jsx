@@ -8,8 +8,8 @@ const Footer = () => {
           © Municipio de <a href="foo">El Marqués</a>, todos los Derechos
           Reservados
         </li>
-        <li className="list-inline-item">
-          Contacto <a href="foo">aloredo@xcubiq.com </a>
+        <li className="list-inline-item float-right">
+          Contacto <a href="foo">info@xcubiq.com </a>
         </li>
       </ul>
     </div>

@@ -427,17 +427,27 @@ export function saveTransaction(transaction) {
   transactionInDb.typeTransaction = typeTransactionsAPI.typeTransactions.find(
     (t) => t._id === transaction.typeTransactionId
   );
+  transactionInDb.typeTransaction = (({ _id, name }) => ({ _id, name }))(
+    transactionInDb.typeTransaction
+  );
+
   transactionInDb.budget = budgetsAPI.budgets.find(
     (b) => b._id === transaction.budgetId
   );
+  transactionInDb.budget = (({ _id, name }) => ({ _id, name }))(
+    transactionInDb.budget
+  );
+
   transactionInDb.amount = transaction.amount;
   transactionInDb.dateTransaction = transaction.dateTransaction;
   transactionInDb.detail = transaction.detail;
 
+  console.log(transactionInDb);
   if (!transactionInDb._id) {
     transactionInDb._id = Date.now().toString();
     transactions.push(transactionInDb);
   }
+  console.log(transactions);
 
   return transactionInDb;
 }

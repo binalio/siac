@@ -46,7 +46,7 @@ class TransactionsTable extends Component {
       label: "Tipo de transacción",
       content: (transaction) => (
         <a
-          href="#"
+          href="#/"
           onClick={() =>
             this.openModal(transaction._id, transaction.typeTransaction.name)
           }
@@ -61,7 +61,7 @@ class TransactionsTable extends Component {
       key: "delete",
       content: (transaction) => (
         <a
-          href="#"
+          href="#/"
           onClick={() => this.openConfirmation(transaction)}
           className="text-muted"
         >
@@ -91,7 +91,7 @@ class TransactionsTable extends Component {
         />
         <ConfirmationModal
           openConfirmation={this.state.confirmIsOpen}
-          transaction={this.state.transaction}
+          elementDelete={this.state.transaction}
           msjConfirmation={this.state.msjConfirmation}
           confirmationClose={() => this.setState({ confirmIsOpen: false })}
           onDelete={this.handleDelete}

@@ -5,7 +5,7 @@ class ConfirmationModal extends Component {
   state = {};
 
   handleConfirmAction = () => {
-    this.props.onDelete(this.props.transaction);
+    this.props.onDelete(this.props.elementDelete);
   };
 
   handleCloseConfirmation = () => {

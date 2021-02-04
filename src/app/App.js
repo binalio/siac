@@ -15,6 +15,7 @@ import SystemSettings from "../systemSettings/systemSettings";
 
 import Footer from "../components/common/footer";
 import NavBar from "../components/common/navBar";
+import OrderConfig from "../broadcastOrders/orderConfig";
 
 class App extends Component {
   render() {
@@ -34,7 +35,7 @@ class App extends Component {
           ) : (
             <NavBar />
           )}
-          <main className="container p-0">
+          <main className="container content-dynamic">
             <Switch>
               <Route path="/not-found" component={NotFound} />
               <Route path="/login" component={Login} />
@@ -42,6 +43,7 @@ class App extends Component {
               <Route path="/dashboard" component={Dashboard} />
               <Route path="/budgets" component={Budgets} />
               <Route path="/contracts" component={Contracts} />
+              <Route path="/broadcastOrders/:id" component={OrderConfig} />
               <Route path="/broadcastOrders" component={BroadcastOrders} />
               <Route path="/ratePlans" component={RatePlans} />
               <Route path="/systemSettings" component={SystemSettings} />

@@ -9,7 +9,7 @@ import "./chart.css";
 class PieChart extends Component {
   render() {
     return (
-      <div class="chart">
+      <div className="chart">
         <ResponsivePie
           data={data}
           innerRadius={0.5}
