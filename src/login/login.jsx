@@ -12,7 +12,7 @@ class Login extends Form {
     errors: {},
   };
 
-// TODO - Agregar patron redex para login con firebase para autenticar
+// TODO - Agregar patron redex para login con firebase para autenticar usuario
 
   schema = {
     username: Joi.string().required().label("Username"),
